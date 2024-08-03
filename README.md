@@ -1,1 +1,1 @@
-# Word-Counter
+# Password-Generator
