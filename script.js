@@ -12,6 +12,8 @@ async function generatePassword() {
         password = addSpecialCharacters(addNumbers(password, length), length);
     }
 
+    password = ensureTypeInclusion(password, type);
+
     document.getElementById('password').innerText = password;
     document.getElementById('securityLevel').innerText = getPasswordSecurityLevel(password);
 }
@@ -41,6 +43,24 @@ function addSpecialCharacters(word, length) {
         word += specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
     }
     return word;
+}
+
+function ensureTypeInclusion(password, type) {
+    const numbers = '0123456789';
+    const specialCharacters = '!@#$%^&*()_+[]{}|;:,.<>?';
+
+    if (type === 'lettersNumbers' && !/\d/.test(password)) {
+        password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    } else if (type === 'lettersNumbersSpecial') {
+        if (!/\d/.test(password)) {
+            password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+        }
+        if (!/[!@#$%^&*()_+\[\]{}|;:,.<>?]/.test(password)) {
+            password += specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
+        }
+    }
+
+    return password;
 }
 
 function getPasswordSecurityLevel(password) {
