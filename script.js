@@ -6,6 +6,8 @@ async function generatePassword() {
     const word = await getWord();
 
     let password = word.slice(0, length);
+    password = addUppercase(password);
+
     if (type === 'lettersNumbers') {
         password = addNumbers(password, length);
     } else if (type === 'lettersNumbersSpecial') {
@@ -29,6 +31,14 @@ async function getWord() {
     }
 }
 
+function addUppercase(word) {
+    if (!/[A-Z]/.test(word)) {
+        const randomIndex = Math.floor(Math.random() * word.length);
+        word = word.substring(0, randomIndex) + word.charAt(randomIndex).toUpperCase() + word.substring(randomIndex + 1);
+    }
+    return word;
+}
+
 function addNumbers(word, length) {
     const numbers = '0123456789';
     while (word.length < length) {
@@ -38,7 +48,7 @@ function addNumbers(word, length) {
 }
 
 function addSpecialCharacters(word, length) {
-    const specialCharacters = '!@#$%^&*()_+[]{}|;:,.<>?';
+    const specialCharacters = '!@#$%^&*()_+';
     while (word.length < length) {
         word += specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
     }
@@ -47,7 +57,7 @@ function addSpecialCharacters(word, length) {
 
 function ensureTypeInclusion(password, type) {
     const numbers = '0123456789';
-    const specialCharacters = '!@#$%^&*()_+[]{}|;:,.<>?';
+    const specialCharacters = '!@#$%^&*()_+';
 
     if (type === 'lettersNumbers' && !/\d/.test(password)) {
         password += numbers.charAt(Math.floor(Math.random() * numbers.length));
@@ -55,7 +65,7 @@ function ensureTypeInclusion(password, type) {
         if (!/\d/.test(password)) {
             password += numbers.charAt(Math.floor(Math.random() * numbers.length));
         }
-        if (!/[!@#$%^&*()_+\[\]{}|;:,.<>?]/.test(password)) {
+        if (!/[!@#$%^&*()_+]/.test(password)) {
             password += specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
         }
     }
